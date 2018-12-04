@@ -1,7 +1,7 @@
 # train-ssd
 本项目旨在任意更改模型，以适用于不同硬件环境
 
-根据Kaiming He的论文，训练数据规模不大时，train from stratch所能达到的精度不如pretain on imagenet。
+根据Kaiming He的论文，训练数据规模不大时，train from stratch所能达到的精度不如pretrain on imagenet。
 
 此处是[ILSVRC2012_img_train](https://pan.baidu.com/s/1TdFvKZJyX_CMkdjWqAlaeg)的下载链接
 
