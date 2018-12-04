@@ -3,8 +3,10 @@
 
 根据Kaiming He的论文，训练数据规模不大时，train from stratch所能达到的精度不如pretrain on imagenet。
 
-此处是[ILSVRC2012_img_train](https://pan.baidu.com/s/1TdFvKZJyX_CMkdjWqAlaeg)的下载链接
+下载地址:
 
-这是我裁剪之后的[ILSVRC2012_img_train_224x224](https://pan.baidu.com/s/1PamzHH14wUITchMelT0Fvw)的下载链接
+原始数据：[ILSVRC2012_img_train](https://pan.baidu.com/s/1TdFvKZJyX_CMkdjWqAlaeg)
+
+裁剪之后：[ILSVRC2012_img_train_224x224](https://pan.baidu.com/s/1PamzHH14wUITchMelT0Fvw)
 
 训练脚本会陆续更新
