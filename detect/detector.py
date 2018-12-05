@@ -26,7 +26,7 @@ class Detector(object):
     ctx : mx.ctx
         device to use, if None, use mx.cpu() as default context
     """
-    def __init__(self, symbol, model_prefix, epoch, data_shape, mean_pixels, \
+    def __init__(self, symbol, model_prefix, epoch, data_shape, \
                  batch_size=1, ctx=None):
         self.ctx = ctx
         if self.ctx is None:
@@ -39,8 +39,7 @@ class Detector(object):
         self.mod.bind(data_shapes=[('data', (batch_size, 3, data_shape, data_shape))])
         self.mod.set_params(args, auxs)
         self.data_shape = data_shape
-        self.mean_pixels = mean_pixels
-
+        
     def detect(self, det_iter, show_timer=False):
         """
         detect all images in iterator
@@ -60,8 +59,8 @@ class Detector(object):
         
         result = []
         detections = []
-        if not isinstance(det_iter, mx.io.PrefetchingIter):
-            det_iter = mx.io.PrefetchingIter(det_iter)
+        #if not isinstance(det_iter, mx.io.PrefetchingIter):
+        #    det_iter = mx.io.PrefetchingIter(det_iter)
         start = timer()
         for pred, _, _ in self.mod.iter_predict(det_iter):
             detections.append(pred[0].asnumpy())
@@ -96,7 +95,7 @@ class Detector(object):
         format np.array([id, score, xmin, ymin, xmax, ymax]...)
         """
         test_db = TestDB(im_list, root_dir=root_dir, extension=extension)
-        test_iter = DetIter(test_db, 1, self.data_shape, self.mean_pixels,
+        test_iter = DetIter(test_db, 1, self.data_shape,
                             is_train=False)
         return self.detect(test_iter, show_timer)
 

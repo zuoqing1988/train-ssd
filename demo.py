@@ -6,7 +6,7 @@ import sys
 from detect.detector import Detector
 from symbol.symbol_factory import get_symbol
 
-def get_detector(net, prefix, epoch, data_shape, mean_pixels, ctx, num_class,
+def get_detector(net, prefix, epoch, data_shape, ctx, num_class,
                  nms_thresh=0.5, force_nms=True, nms_topk=400):
     """
     wrapper for initialize a detector
@@ -36,7 +36,7 @@ def get_detector(net, prefix, epoch, data_shape, mean_pixels, ctx, num_class,
     if net is not None:
         net = get_symbol(net, data_shape, num_classes=num_class, nms_thresh=nms_thresh,
             force_nms=force_nms, nms_topk=nms_topk)
-    detector = Detector(net, prefix, epoch, data_shape, mean_pixels, ctx=ctx)
+    detector = Detector(net, prefix, epoch, data_shape, ctx=ctx)
     return detector
 
 def parse_args():
@@ -60,12 +60,6 @@ def parse_args():
                         help='GPU device id to detect with')
     parser.add_argument('--data-shape', dest='data_shape', type=int, default=512,
                         help='set image shape')
-    parser.add_argument('--mean-r', dest='mean_r', type=float, default=127.5, #123,
-                        help='red mean value')
-    parser.add_argument('--mean-g', dest='mean_g', type=float, default=127.5, #117,
-                        help='green mean value')
-    parser.add_argument('--mean-b', dest='mean_b', type=float, default=127.5, #104,
-                        help='blue mean value')
     parser.add_argument('--thresh', dest='thresh', type=float, default=0.5,
                         help='object visualize score threshold, default 0.6')
     parser.add_argument('--nms', dest='nms_thresh', type=float, default=0.5,
@@ -118,7 +112,6 @@ if __name__ == '__main__':
         prefix = args.prefix
     detector = get_detector(network, prefix, args.epoch,
                             args.data_shape,
-                            (args.mean_r, args.mean_g, args.mean_b),
                             ctx, len(class_names), args.nms_thresh, args.force_nms)
     # run detection
     detector.detect_and_visualize(image_list, args.dir, args.extension,

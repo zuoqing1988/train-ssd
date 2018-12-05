@@ -81,6 +81,10 @@ class DetRecordIter(mx.io.DataIter):
         if not self._batch:
             return False
 
+        #print 'convert start'
+        #print self._batch.data[0].shape
+        self._batch.data = [(self._batch.data[0]-127.5)*0.0078125]
+        #print 'converted'
         if self.provide_label is None:
             # estimate the label shape for the first batch, always reshape to n*5
             first_label = self._batch.label[0][0].asnumpy()
@@ -280,4 +284,5 @@ class DetIter(mx.io.DataIter):
         data = mx.nd.transpose(data, (2,0,1))
         data = data.astype('float32')
         data = (data - 127.5)*0.0078125
+        #data = data - 127.5
         return data, label
