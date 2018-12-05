@@ -4,7 +4,7 @@ import sys,os
 sys.path.append(os.getcwd())
 from classify_core.imdb import IMDB
 from train import train_net
-from classify_core.symbol import get_symbol
+from symbol.mymodel import get_symbol
 
 def train_imagenet(anno_file, color_mode, num_classes, prefix, ctx,
                 pretrained, epoch, begin_epoch, end_epoch, batch_size, thread_num, 
