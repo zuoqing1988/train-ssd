@@ -30,7 +30,7 @@
 
 参照[mxnet-ssd官方](https://github.com/apache/incubator-mxnet/tree/master/example/ssd)
 
-或者你从[此处]()下载打包好的文件, 解压到data文件夹
+或者你从[此处](https://pan.baidu.com/s/1nqQ80Ot7r91D66gzou4IuQ)下载打包好的文件, 解压到data文件夹
 
 	data/train.idx
 	data/train.lst
