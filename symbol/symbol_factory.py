@@ -141,7 +141,7 @@ def get_config(network, data_shape, **kwargs):
         steps = []
         return locals()
     elif network == 'mymodel':
-        from_layers = ['conv_12_relu', 'conv_14_relu', '', '', '', '', '']
+        from_layers = ['conv12_relu', 'conv14_relu', '', '', '', '', '']
         num_filters = [-1, -1, 512, 256, 256, 256, 256]
         strides = [-1, -1, 2, 2, 2, 2, 2]
         pads = [-1, -1, 1, 1, 1, 1, 1]

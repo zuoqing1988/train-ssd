@@ -9,37 +9,37 @@ def Conv(data, num_filter=1, kernel=(1, 1), stride=(1, 1), pad=(0, 0), num_group
 def get_symbol(num_classes, **kwargs):
     label = mx.symbol.Variable(name="label") # 224
     data = mx.symbol.Variable(name="data") # 224
-    conv_1 = Conv(data, num_filter=32, kernel=(3, 3), pad=(1, 1), stride=(2, 2), name="conv_1") # 224/112
-    conv_2_dw = Conv(conv_1, num_group=32, num_filter=32, kernel=(3, 3), pad=(1, 1), stride=(1, 1), name="conv_2_dw") # 112/112
-    conv_2 = Conv(conv_2_dw, num_filter=64, kernel=(1, 1), pad=(0, 0), stride=(1, 1), name="conv_2") # 112/112
-    conv_3_dw = Conv(conv_2, num_group=64, num_filter=64, kernel=(3, 3), pad=(1, 1), stride=(2, 2), name="conv_3_dw") # 112/56
-    conv_3 = Conv(conv_3_dw, num_filter=128, kernel=(1, 1), pad=(0, 0), stride=(1, 1), name="conv_3") # 56/56
-    conv_4_dw = Conv(conv_3, num_group=128, num_filter=128, kernel=(3, 3), pad=(1, 1), stride=(1, 1), name="conv_4_dw") # 56/56
-    conv_4 = Conv(conv_4_dw, num_filter=128, kernel=(1, 1), pad=(0, 0), stride=(1, 1), name="conv_4") # 56/56
-    conv_5_dw = Conv(conv_4, num_group=128, num_filter=128, kernel=(3, 3), pad=(1, 1), stride=(2, 2), name="conv_5_dw") # 56/28
-    conv_5 = Conv(conv_5_dw, num_filter=256, kernel=(1, 1), pad=(0, 0), stride=(1, 1), name="conv_5") # 28/28
-    conv_6_dw = Conv(conv_5, num_group=256, num_filter=256, kernel=(3, 3), pad=(1, 1), stride=(1, 1), name="conv_6_dw") # 28/28
-    conv_6 = Conv(conv_6_dw, num_filter=256, kernel=(1, 1), pad=(0, 0), stride=(1, 1), name="conv_6") # 28/28
-    conv_7_dw = Conv(conv_6, num_group=256, num_filter=256, kernel=(3, 3), pad=(1, 1), stride=(2, 2), name="conv_7_dw") # 28/14
-    conv_7 = Conv(conv_7_dw, num_filter=512, kernel=(1, 1), pad=(0, 0), stride=(1, 1), name="conv_7") # 14/14
+    conv1 = Conv(data, num_filter=32, kernel=(3, 3), pad=(1, 1), stride=(2, 2), name="conv1") # 224/112
+    conv2_dw = Conv(conv1, num_group=32, num_filter=32, kernel=(3, 3), pad=(1, 1), stride=(1, 1), name="conv2_dw") # 112/112
+    conv2 = Conv(conv2_dw, num_filter=64, kernel=(1, 1), pad=(0, 0), stride=(1, 1), name="conv2") # 112/112
+    conv3_dw = Conv(conv2, num_group=64, num_filter=64, kernel=(3, 3), pad=(1, 1), stride=(2, 2), name="conv3_dw") # 112/56
+    conv3 = Conv(conv3_dw, num_filter=128, kernel=(1, 1), pad=(0, 0), stride=(1, 1), name="conv3") # 56/56
+    conv4_dw = Conv(conv3, num_group=128, num_filter=128, kernel=(3, 3), pad=(1, 1), stride=(1, 1), name="conv4_dw") # 56/56
+    conv4 = Conv(conv4_dw, num_filter=128, kernel=(1, 1), pad=(0, 0), stride=(1, 1), name="conv4") # 56/56
+    conv5_dw = Conv(conv4, num_group=128, num_filter=128, kernel=(3, 3), pad=(1, 1), stride=(2, 2), name="conv5_dw") # 56/28
+    conv5 = Conv(conv5_dw, num_filter=256, kernel=(1, 1), pad=(0, 0), stride=(1, 1), name="conv5") # 28/28
+    conv6_dw = Conv(conv5, num_group=256, num_filter=256, kernel=(3, 3), pad=(1, 1), stride=(1, 1), name="conv6_dw") # 28/28
+    conv6 = Conv(conv6_dw, num_filter=256, kernel=(1, 1), pad=(0, 0), stride=(1, 1), name="conv6") # 28/28
+    conv7_dw = Conv(conv6, num_group=256, num_filter=256, kernel=(3, 3), pad=(1, 1), stride=(2, 2), name="conv7_dw") # 28/14
+    conv7 = Conv(conv7_dw, num_filter=512, kernel=(1, 1), pad=(0, 0), stride=(1, 1), name="conv7") # 14/14
 
-    conv_8_dw = Conv(conv_7, num_group=512, num_filter=512, kernel=(3, 3), pad=(1, 1), stride=(1, 1), name="conv_8_dw") # 14/14
-    conv_8 = Conv(conv_8_dw, num_filter=512, kernel=(1, 1), pad=(0, 0), stride=(1, 1), name="conv_8") # 14/14
-    conv_9_dw = Conv(conv_8, num_group=512, num_filter=512, kernel=(3, 3), pad=(1, 1), stride=(1, 1), name="conv_9_dw") # 14/14
-    conv_9 = Conv(conv_9_dw, num_filter=512, kernel=(1, 1), pad=(0, 0), stride=(1, 1), name="conv_9") # 14/14
-    conv_10_dw = Conv(conv_9, num_group=512, num_filter=512, kernel=(3, 3), pad=(1, 1), stride=(1, 1), name="conv_10_dw") # 14/14
-    conv_10 = Conv(conv_10_dw, num_filter=512, kernel=(1, 1), pad=(0, 0), stride=(1, 1), name="conv_10") # 14/14
-    conv_11_dw = Conv(conv_10, num_group=512, num_filter=512, kernel=(3, 3), pad=(1, 1), stride=(1, 1), name="conv_11_dw") # 14/14
-    conv_11 = Conv(conv_11_dw, num_filter=512, kernel=(1, 1), pad=(0, 0), stride=(1, 1), name="conv_11") # 14/14
-    conv_12_dw = Conv(conv_11, num_group=512, num_filter=512, kernel=(3, 3), pad=(1, 1), stride=(1, 1), name="conv_12_dw") # 14/14
-    conv_12 = Conv(conv_12_dw, num_filter=512, kernel=(1, 1), pad=(0, 0), stride=(1, 1), name="conv_12") # 14/14
+    conv8_dw = Conv(conv7, num_group=512, num_filter=512, kernel=(3, 3), pad=(1, 1), stride=(1, 1), name="conv8_dw") # 14/14
+    conv8 = Conv(conv8_dw, num_filter=512, kernel=(1, 1), pad=(0, 0), stride=(1, 1), name="conv8") # 14/14
+    conv9_dw = Conv(conv8, num_group=512, num_filter=512, kernel=(3, 3), pad=(1, 1), stride=(1, 1), name="conv9_dw") # 14/14
+    conv9 = Conv(conv9_dw, num_filter=512, kernel=(1, 1), pad=(0, 0), stride=(1, 1), name="conv9") # 14/14
+    conv10_dw = Conv(conv9, num_group=512, num_filter=512, kernel=(3, 3), pad=(1, 1), stride=(1, 1), name="conv10_dw") # 14/14
+    conv10 = Conv(conv10_dw, num_filter=512, kernel=(1, 1), pad=(0, 0), stride=(1, 1), name="conv10") # 14/14
+    conv11_dw = Conv(conv10, num_group=512, num_filter=512, kernel=(3, 3), pad=(1, 1), stride=(1, 1), name="conv11_dw") # 14/14
+    conv11 = Conv(conv11_dw, num_filter=512, kernel=(1, 1), pad=(0, 0), stride=(1, 1), name="conv11") # 14/14
+    conv12_dw = Conv(conv11, num_group=512, num_filter=512, kernel=(3, 3), pad=(1, 1), stride=(1, 1), name="conv12_dw") # 14/14
+    conv12 = Conv(conv12_dw, num_filter=512, kernel=(1, 1), pad=(0, 0), stride=(1, 1), name="conv12") # 14/14
 
-    conv_13_dw = Conv(conv_12, num_group=512, num_filter=512, kernel=(3, 3), pad=(1, 1), stride=(2, 2), name="conv_13_dw") # 14/7
-    conv_13 = Conv(conv_13_dw, num_filter=1024, kernel=(1, 1), pad=(0, 0), stride=(1, 1), name="conv_13") # 7/7
-    conv_14_dw = Conv(conv_13, num_group=1024, num_filter=1024, kernel=(3, 3), pad=(1, 1), stride=(1, 1), name="conv_14_dw") # 7/7
-    conv_14 = Conv(conv_14_dw, num_filter=1024, kernel=(1, 1), pad=(0, 0), stride=(1, 1), name="conv_14") # 7/7
+    conv13_dw = Conv(conv12, num_group=512, num_filter=512, kernel=(3, 3), pad=(1, 1), stride=(2, 2), name="conv13_dw") # 14/7
+    conv13 = Conv(conv13_dw, num_filter=1024, kernel=(1, 1), pad=(0, 0), stride=(1, 1), name="conv13") # 7/7
+    conv14_dw = Conv(conv13, num_group=1024, num_filter=1024, kernel=(3, 3), pad=(1, 1), stride=(1, 1), name="conv14_dw") # 7/7
+    conv14 = Conv(conv14_dw, num_filter=1024, kernel=(1, 1), pad=(0, 0), stride=(1, 1), name="conv14") # 7/7
 
-    pool = mx.sym.Pooling(data=conv_14, kernel=(7, 7), stride=(1, 1), pool_type="avg", name="global_pool", global_pool=True)
+    pool = mx.sym.Pooling(data=conv14, kernel=(7, 7), stride=(1, 1), pool_type="avg", name="global_pool", global_pool=True)
     fc = mx.symbol.FullyConnected(data=pool, num_hidden=num_classes, name='fc')
     cls_prob = mx.symbol.SoftmaxOutput(data=fc, label=label, multi_output=True, use_ignore=True,  name="cls_prob")
     group = mx.symbol.Group([cls_prob, label])
