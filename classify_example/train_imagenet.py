@@ -2,16 +2,17 @@ import argparse
 import mxnet as mx
 import sys,os
 sys.path.append(os.getcwd())
+sys.path.append(os.getcwd()+'/symbol')
 from classify_core.imdb import IMDB
 from train import train_net
-from symbol.mymodel import get_symbol
+import mymodel
 
 def train_imagenet(anno_file, color_mode, num_classes, prefix, ctx,
                 pretrained, epoch, begin_epoch, end_epoch, batch_size, thread_num, 
                 frequent, lr,lr_epoch, resume):
     imdb = IMDB(anno_file)
     gt_imdb = imdb.get_annotations()
-    sym = get_symbol(num_classes)
+    sym = mymodel.get_symbol(num_classes)
 
     train_net(sym, prefix, ctx, pretrained, epoch, begin_epoch, end_epoch, gt_imdb, color_mode, batch_size, thread_num,
               frequent, not resume, lr, lr_epoch)
