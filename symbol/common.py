@@ -1,7 +1,7 @@
 import mxnet as mx
 import numpy as np
 
-def conv_act_layer(from_layer, name, num_filter, kernel=(1,1), pad=(0,0), \
+def conv_act_layer(from_layer, name, num_filter, num_group = 1, kernel=(1,1), pad=(0,0), \
     stride=(1,1), act_type="relu", use_batchnorm=False):
     """
     wrapper for a small Convolution group
@@ -32,7 +32,7 @@ def conv_act_layer(from_layer, name, num_filter, kernel=(1,1), pad=(0,0), \
     bias = mx.symbol.Variable(name="{}_conv_bias".format(name),   
         init=mx.init.Constant(0.0), attr={'__lr_mult__': '2.0'})
     conv = mx.symbol.Convolution(data=from_layer, kernel=kernel, pad=pad, \
-        stride=stride, num_filter=num_filter, name="{}_conv".format(name), bias=bias)
+        stride=stride, num_filter=num_filter, num_group=num_group, name="{}_conv".format(name), bias=bias)
     if use_batchnorm:
         conv = mx.symbol.BatchNorm(data=conv, name="{}_bn".format(name))
     relu = mx.symbol.Activation(data=conv, act_type=act_type, \
@@ -78,7 +78,7 @@ def legacy_conv_act_layer(from_layer, name, num_filter, kernel=(1,1), pad=(0,0),
         relu = mx.symbol.BatchNorm(data=relu, name="bn{}".format(name))
     return conv, relu
 
-def multi_layer_feature(body, from_layers, num_filters, strides, pads, min_filter=128):
+def multi_layer_feature(body, from_layers, num_filters, strides, pads, min_filter=64):
     """Wrapper function to extract features from base network, attaching extra
     layers and SSD specific layers
 
@@ -128,10 +128,10 @@ def multi_layer_feature(body, from_layers, num_filters, strides, pads, min_filte
             assert num_filter > 0
             layer = layers[-1]
             num_1x1 = max(min_filter, num_filter // 2)
-            conv_1x1 = conv_act_layer(layer, 'multi_feat_%d_conv_1x1' % (k),
-                num_1x1, kernel=(1, 1), pad=(0, 0), stride=(1, 1), act_type='relu')
-            conv_3x3 = conv_act_layer(conv_1x1, 'multi_feat_%d_conv_3x3' % (k),
-                num_filter, kernel=(3, 3), pad=(p, p), stride=(s, s), act_type='relu')
+            conv_1x1 = conv_act_layer(layer, 'ft%d_proj' % (k),
+                num_1x1, num_group=1, kernel=(1, 1), pad=(0, 0), stride=(1, 1), act_type='relu')
+            conv_3x3 = conv_act_layer(conv_1x1, 'ft%d_3x3' % (k),
+                num_1x1, num_group=1, kernel=(3, 3), pad=(p, p), stride=(s, s), act_type='relu')
             layers.append(conv_3x3)
     return layers
 
@@ -247,7 +247,7 @@ def multibox_layer(from_layers, num_classes, sizes=[.2, .95],
             init=mx.init.Constant(0.0), attr={'__lr_mult__': '2.0'})
         loc_pred = mx.symbol.Convolution(data=from_layer, bias=bias, kernel=(3,3), \
             stride=(1,1), pad=(1,1), num_filter=num_loc_pred, \
-            name="{}_loc_pred_conv".format(from_name))
+            name="{}_loc".format(from_name))
         loc_pred = mx.symbol.transpose(loc_pred, axes=(0,2,3,1))
         loc_pred = mx.symbol.Flatten(data=loc_pred)
         loc_pred_layers.append(loc_pred)
@@ -258,7 +258,7 @@ def multibox_layer(from_layers, num_classes, sizes=[.2, .95],
             init=mx.init.Constant(0.0), attr={'__lr_mult__': '2.0'})
         cls_pred = mx.symbol.Convolution(data=from_layer, bias=bias, kernel=(3,3), \
             stride=(1,1), pad=(1,1), num_filter=num_cls_pred, \
-            name="{}_cls_pred_conv".format(from_name))
+            name="{}_cls".format(from_name))
         cls_pred = mx.symbol.transpose(cls_pred, axes=(0,2,3,1))
         cls_pred = mx.symbol.Flatten(data=cls_pred)
         cls_pred_layers.append(cls_pred)
@@ -274,11 +274,11 @@ def multibox_layer(from_layers, num_classes, sizes=[.2, .95],
         anchor_layers.append(anchors)
 
     loc_preds = mx.symbol.Concat(*loc_pred_layers, num_args=len(loc_pred_layers), \
-        dim=1, name="multibox_loc_pred")
+        dim=1, name="multibox_loc")
     cls_preds = mx.symbol.Concat(*cls_pred_layers, num_args=len(cls_pred_layers), \
         dim=1)
     cls_preds = mx.symbol.Reshape(data=cls_preds, shape=(0, -1, num_classes))
-    cls_preds = mx.symbol.transpose(cls_preds, axes=(0, 2, 1), name="multibox_cls_pred")
+    cls_preds = mx.symbol.transpose(cls_preds, axes=(0, 2, 1), name="multibox_cls")
     anchor_boxes = mx.symbol.Concat(*anchor_layers, \
         num_args=len(anchor_layers), dim=1)
     anchor_boxes = mx.symbol.Reshape(data=anchor_boxes, shape=(0, -1, 4), name="multibox_anchors")
