@@ -54,7 +54,7 @@ def parse_args():
                         help='refactor learning rate at specified epochs')
     parser.add_argument('--lr-factor', dest='lr_refactor_ratio', type=str, default=0.1,
                         help='ratio to refactor learning rate')
-    parser.add_argument('--freeze', dest='freeze_pattern', type=str, default="^(conv1_|conv2_|conv3_|conv4_).*",
+    parser.add_argument('--freeze', dest='freeze_pattern', type=str, default="^(conv1_|conv2_).*",
                         help='freeze layer pattern')
     parser.add_argument('--log', dest='log_file', type=str, default="train.log",
                         help='save training log to file')
