@@ -35,8 +35,8 @@ def conv_act_layer(from_layer, name, num_filter, num_group = 1, kernel=(1,1), pa
         stride=stride, num_filter=num_filter, num_group=num_group, name="{}_conv".format(name), bias=bias)
     if use_batchnorm:
         conv = mx.symbol.BatchNorm(data=conv, name="{}_bn".format(name))
-    relu = mx.symbol.Activation(data=conv, act_type=act_type, \
-        name="{}_{}".format(name, act_type))
+    #relu = mx.symbol.Activation(data=conv, act_type=act_type, name="{}_{}".format(name, act_type))
+    relu = mx.sym.LeakyReLU(data=conv, act_type="prelu", name="{}_{}".format(name, act_type))
     return relu
 
 def legacy_conv_act_layer(from_layer, name, num_filter, kernel=(1,1), pad=(0,0), \
@@ -72,8 +72,8 @@ def legacy_conv_act_layer(from_layer, name, num_filter, kernel=(1,1), pad=(0,0),
         init=mx.init.Constant(0.0), attr={'__lr_mult__': '2.0'})
     conv = mx.symbol.Convolution(data=from_layer, bias=bias, kernel=kernel, pad=pad, \
         stride=stride, num_filter=num_filter, name="conv{}".format(name))
-    relu = mx.symbol.Activation(data=conv, act_type=act_type, \
-        name="{}{}".format(act_type, name))
+    #relu = mx.symbol.Activation(data=conv, act_type=act_type, name="{}{}".format(act_type, name))
+    relu = mx.sym.LeakyReLU(data=conv, act_type="prelu", name="{}{}".format(act_type, name))
     if use_batchnorm:
         relu = mx.symbol.BatchNorm(data=relu, name="bn{}".format(name))
     return conv, relu
@@ -237,8 +237,8 @@ def multibox_layer(from_layers, num_classes, sizes=[.2, .95],
             from_layer = mx.symbol.Convolution(data=from_layer, kernel=(3,3), \
                 stride=(1,1), pad=(1,1), num_filter=interm_layer, \
                 name="{}_inter_conv".format(from_name))
-            from_layer = mx.symbol.Activation(data=from_layer, act_type="relu", \
-                name="{}_inter_relu".format(from_name))
+            #from_layer = mx.symbol.Activation(data=from_layer, act_type="relu", name="{}_inter_relu".format(from_name))
+            from_layer = mx.symbol.LeakyReLU(data=from_layer, act_type="prelu", name="{}_inter_relu".format(from_name))
 
         # estimate number of anchors per location
         # here I follow the original version in caffe

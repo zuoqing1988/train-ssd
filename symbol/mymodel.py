@@ -3,7 +3,8 @@ import mxnet as mx
 def Conv(data, num_filter=1, kernel=(1, 1), stride=(1, 1), pad=(0, 0), num_group=1, name=None, suffix=''):
     conv = mx.sym.Convolution(data=data, num_filter=num_filter, kernel=kernel, num_group=num_group, stride=stride, pad=pad, no_bias=True, name='%s%s' %(name, suffix))
     bn = mx.sym.BatchNorm(data=conv, name='%s%s_bn' %(name, suffix), fix_gamma=True)
-    act = mx.sym.Activation(data=bn, act_type='relu', name='%s%s_relu' %(name, suffix))
+    #act = mx.sym.Activation(data=bn, act_type='relu', name='%s%s_relu' %(name, suffix))
+    act = mx.sym.LeakyReLU(data=bn, act_type="prelu", name='%s%s_relu' %(name, suffix))
     return act
 
 def get_symbol(num_classes, **kwargs):
