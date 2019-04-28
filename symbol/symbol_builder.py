@@ -10,7 +10,7 @@ def import_module(module_name):
     return importlib.import_module(module_name)
 
 def get_symbol_train(network, num_classes, from_layers, num_filters, strides, pads,
-                     sizes, ratios, normalizations=-1, steps=[], min_filter=128,
+                     sizes, ratios, normalizations=-1, steps=[], min_filter=16,
                      nms_thresh=0.5, force_suppress=False, nms_topk=400, minimum_negative_samples=0, **kwargs):
     """Build network symbol for training SSD
 
@@ -101,7 +101,7 @@ def get_symbol_train(network, num_classes, from_layers, num_filters, strides, pa
     return out
 
 def get_symbol(network, num_classes, from_layers, num_filters, sizes, ratios,
-               strides, pads, normalizations=-1, steps=[], min_filter=128,
+               strides, pads, normalizations=-1, steps=[], min_filter=64,
                nms_thresh=0.5, force_suppress=False, nms_topk=400, **kwargs):
     """Build network for testing SSD
 

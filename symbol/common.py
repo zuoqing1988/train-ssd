@@ -127,11 +127,21 @@ def multi_layer_feature(body, from_layers, num_filters, strides, pads, min_filte
             assert len(layers) > 0
             assert num_filter > 0
             layer = layers[-1]
+            """
             num_1x1 = max(min_filter, num_filter // 2)
-            conv_1x1 = conv_act_layer(layer, 'ft%d_proj' % (k),
+            conv_proj = conv_act_layer(layer, 'ft%d_proj' % (k),
                 num_1x1, num_group=1, kernel=(1, 1), pad=(0, 0), stride=(1, 1), act_type='relu')
-            conv_3x3 = conv_act_layer(conv_1x1, 'ft%d_3x3' % (k),
-                num_1x1, num_group=1, kernel=(3, 3), pad=(p, p), stride=(s, s), act_type='relu')
+            conv_dw = conv_act_layer(conv_proj, 'ft%d_dw' % (k),
+                num_1x1, num_group=num_1x1, kernel=(3, 3), pad=(p, p), stride=(s, s), act_type='relu')
+            conv_sep = conv_act_layer(conv_dw, 'ft%d_sep' % (k),
+                num_filter, num_group=1, kernel=(1, 1), pad=(0, 0), stride=(1, 1), act_type='relu')
+            layers.append(conv_sep)
+            """
+            num_1x1 = max(min_filter, num_filter // 4)
+            conv_proj = conv_act_layer(layer, 'ft%d_proj' % (k),
+                num_1x1, num_group=1, kernel=(1, 1), pad=(0, 0), stride=(1, 1), act_type='relu')
+            conv_3x3 = conv_act_layer(conv_proj, 'ft%d_3x3' % (k),
+                num_filter, kernel=(3, 3), pad=(p, p), stride=(s, s), act_type='relu')
             layers.append(conv_3x3)
     return layers
 
@@ -245,8 +255,8 @@ def multibox_layer(from_layers, num_classes, sizes=[.2, .95],
         num_loc_pred = num_anchors * 4
         bias = mx.symbol.Variable(name="{}_loc_pred_conv_bias".format(from_name),
             init=mx.init.Constant(0.0), attr={'__lr_mult__': '2.0'})
-        loc_pred = mx.symbol.Convolution(data=from_layer, bias=bias, kernel=(3,3), \
-            stride=(1,1), pad=(1,1), num_filter=num_loc_pred, \
+        loc_pred = mx.symbol.Convolution(data=from_layer, bias=bias, kernel=(1,1), \
+            stride=(1,1), pad=(0,0), num_filter=num_loc_pred, \
             name="{}_loc".format(from_name))
         loc_pred = mx.symbol.transpose(loc_pred, axes=(0,2,3,1))
         loc_pred = mx.symbol.Flatten(data=loc_pred)
@@ -256,8 +266,8 @@ def multibox_layer(from_layers, num_classes, sizes=[.2, .95],
         num_cls_pred = num_anchors * num_classes
         bias = mx.symbol.Variable(name="{}_cls_pred_conv_bias".format(from_name),
             init=mx.init.Constant(0.0), attr={'__lr_mult__': '2.0'})
-        cls_pred = mx.symbol.Convolution(data=from_layer, bias=bias, kernel=(3,3), \
-            stride=(1,1), pad=(1,1), num_filter=num_cls_pred, \
+        cls_pred = mx.symbol.Convolution(data=from_layer, bias=bias, kernel=(1,1), \
+            stride=(1,1), pad=(0,0), num_filter=num_cls_pred, \
             name="{}_cls".format(from_name))
         cls_pred = mx.symbol.transpose(cls_pred, axes=(0,2,3,1))
         cls_pred = mx.symbol.Flatten(data=cls_pred)

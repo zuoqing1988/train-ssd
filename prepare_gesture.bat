@@ -1,0 +1,2 @@
+python tools\prepare_dataset_migu.py --anno_file F:\gesture_data_20190423_cleaning.txt --target gesture_train.lst --root F:\gesture_data_20190418
+python tools\prepare_dataset_migu.py --anno_file F:\gesture_data_20190423_cleaning.txt --target gesture_val.lst --root F:\gesture_data_20190418 --select True
