@@ -13,7 +13,7 @@ def train_imagenet(network, anno_file, color_mode, num_classes, prefix, ctx,
                 frequent, lr,lr_epoch, resume):
     imdb = IMDB(anno_file)
     gt_imdb = imdb.get_annotations()
-    if network == 'mymodel2'
+    if network == 'mymodel2':
         sym = mymodel2.get_symbol(num_classes)
     else:
         sym = mymodel.get_symbol(num_classes)
