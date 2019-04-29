@@ -141,16 +141,49 @@ def get_config(network, data_shape, **kwargs):
         steps = []
         return locals()
     elif network == 'mymodel':
-        from_layers = ['conv12_sep_relu', 'conv14_sep_relu', '', '', '', '']
-        num_filters = [-1, -1, 256, 256, 256, 128]
-        strides = [-1, -1, 2, 2, 2, 2]
-        pads = [-1, -1, 1, 1, 1, 1]
-        sizes = get_scales(min_scale=0.2, max_scale=0.9, num_layers=len(from_layers))
-        ratios = [[1,2,.5], [1,2,.5,3,1./3], [1,2,.5,3,1./3], [1,2,.5,3,1./3], \
-                  [1,2,.5,3,1./3], [1,2,.5]]
-        normalizations = -1
-        steps = []
-        return locals()
+        if data_shape >= 512:
+            from_layers = ['conv12_sep_relu', 'conv14_sep_relu', '', '', '', '', '']
+            num_filters = [-1, -1, 256, 256, 256, 256, 128]
+            strides = [-1, -1, 2, 2, 2, 2, 2]
+            pads = [-1, -1, 1, 1, 1, 1, 1]
+            sizes = get_scales(min_scale=0.15, max_scale=0.9, num_layers=len(from_layers))
+            ratios = [[1,2,.5], [1,2,.5,3,1./3], [1,2,.5,3,1./3], [1,2,.5,3,1./3], \
+                      [1,2,.5,3,1./3], [1,2,.5], [1,2,.5]]
+            normalizations = -1
+            steps = []
+            return locals()
+        elif data_shape >= 256:
+            from_layers = ['conv12_sep_relu', 'conv14_sep_relu', '', '', '', '']
+            num_filters = [-1, -1, 256, 256, 256, 128]
+            strides = [-1, -1, 2, 2, 2, 2]
+            pads = [-1, -1, 1, 1, 1, 1]
+            sizes = get_scales(min_scale=0.2, max_scale=0.9, num_layers=len(from_layers))
+            ratios = [[1,2,.5], [1,2,.5,3,1./3], [1,2,.5,3,1./3], [1,2,.5,3,1./3], \
+                      [1,2,.5,3,1./3], [1,2,.5]]
+            normalizations = -1
+            steps = []
+            return locals()
+        elif data_shape >= 128:
+            from_layers = ['conv12_sep_relu', 'conv14_sep_relu', '', '', '']
+            num_filters = [-1, -1, 256, 256, 128]
+            strides = [-1, -1, 2, 2, 2]
+            pads = [-1, -1, 1, 1, 1]
+            sizes = get_scales(min_scale=0.2, max_scale=0.9, num_layers=len(from_layers))
+            ratios = [[1,2,.5], [1,2,.5,3,1./3], [1,2,.5,3,1./3], [1,2,.5,3,1./3], \
+                      [1,2,.5,3,1./3]]
+            normalizations = -1
+            steps = []
+            return locals()
+        else:
+            from_layers = ['conv12_sep_relu', 'conv14_sep_relu', '', '']
+            num_filters = [-1, -1, 256, 128]
+            strides = [-1, -1, 2, 2]
+            pads = [-1, -1, 1, 1]
+            sizes = get_scales(min_scale=0.2, max_scale=0.9, num_layers=len(from_layers))
+            ratios = [[1,2,.5], [1,2,.5,3,1./3], [1,2,.5,3,1./3], [1,2,.5,3,1./3]]
+            normalizations = -1
+            steps = []
+            return locals()
     elif network == 'densenet121':
         network = 'densenet'
         data_type = 'imagenet'
