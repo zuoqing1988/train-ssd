@@ -6,14 +6,17 @@ sys.path.append(os.getcwd()+'/symbol')
 from classify_core.imdb import IMDB
 from train import train_net
 import mymodel
+import mymodel2
 
-def train_imagenet(anno_file, color_mode, num_classes, prefix, ctx,
+def train_imagenet(network, anno_file, color_mode, num_classes, prefix, ctx,
                 pretrained, epoch, begin_epoch, end_epoch, batch_size, thread_num, 
                 frequent, lr,lr_epoch, resume):
     imdb = IMDB(anno_file)
     gt_imdb = imdb.get_annotations()
-    sym = mymodel.get_symbol(num_classes)
-
+    if network == 'mymodel2'
+        sym = mymodel2.get_symbol(num_classes)
+    else:
+        sym = mymodel.get_symbol(num_classes)
     train_net(sym, prefix, ctx, pretrained, epoch, begin_epoch, end_epoch, gt_imdb, color_mode, batch_size, thread_num,
               frequent, not resume, lr, lr_epoch)
 
@@ -26,6 +29,8 @@ def parse_args():
                         default='rgb', type=str)
     parser.add_argument('--num_classes', dest='num_classes', help='num of classes',
                         default=1000, type=int)
+    parser.add_argument('--network', dest='network', help='network',
+                        default='mymodel', type=str)
     parser.add_argument('--prefix', dest='prefix', help='new model prefix',
                         default='model/mymodel', type=str)
     parser.add_argument('--gpus', dest='gpu_ids', help='GPU device to train with',
@@ -59,5 +64,5 @@ if __name__ == '__main__':
     print args
     ctx = [mx.gpu(int(i)) for i in args.gpu_ids.split(',')]
     lr_epoch = [int(i) for i in args.lr_epoch.split(',')]
-    train_imagenet(args.anno_file, args.color_mode, args.num_classes, args.prefix, ctx, args.pretrained, args.epoch, args.begin_epoch, 
+    train_imagenet(args.network, args.anno_file, args.color_mode, args.num_classes, args.prefix, ctx, args.pretrained, args.epoch, args.begin_epoch, 
                 args.end_epoch, args.batch_size, args.thread_num, args.frequent, args.lr, lr_epoch, args.resume)
