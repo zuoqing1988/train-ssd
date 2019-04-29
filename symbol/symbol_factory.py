@@ -140,7 +140,7 @@ def get_config(network, data_shape, **kwargs):
         normalizations = -1
         steps = []
         return locals()
-    elif network == 'mymodel':
+    elif network == 'mymodel' or network == 'mymodel2':
         if data_shape >= 512:
             from_layers = ['conv12_sep_relu', 'conv14_sep_relu', '', '', '', '', '']
             num_filters = [-1, -1, 256, 256, 256, 256, 128]
