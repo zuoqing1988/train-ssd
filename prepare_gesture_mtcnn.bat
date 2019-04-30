@@ -1,0 +1,2 @@
+python tools\prepare_dataset_migu_2_anno_prob.py --anno_file F:\gesture_data_20190423_cleaning.txt --target hand
+#python tools\prepare_dataset_migu_2_anno_prob.py --anno_file F:\gesture_data_20190423_cleaning.txt --target hand --select True
